@@ -16,67 +16,73 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
 .landing-title span{color:#c8102e;}
 .landing-sub{font-size:15px;color:#888;margin-top:16px;letter-spacing:0.5px;}
 
-/* ── SCROLL CUES (shared style) ── */
+/* ── SCROLL CUES ── */
 .scroll-cue{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;opacity:0.6;transition:opacity 0.2s;}
 .scroll-cue:hover{opacity:1;}
 .scroll-cue-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c8102e;}
-.scroll-cue-arrow{width:28px;height:28px;border-right:2px solid #c8102e;border-bottom:2px solid #c8102e;transform:rotate(45deg);animation:bounce 1.6s infinite;}
+.scroll-cue-arrow{width:24px;height:24px;border-right:2px solid #c8102e;border-bottom:2px solid #c8102e;transform:rotate(45deg);animation:bounce 1.6s infinite;}
 @keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0);}50%{transform:rotate(45deg) translateY(6px);}}
-
-/* Landing arrow — absolute bottom */
 .landing .scroll-cue{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);}
+.coaches-scroll-cue{margin:16px auto 0;width:fit-content;}
 
-/* Coaches-to-form arrow — centred below the coach grids */
-.coaches-scroll-cue{margin:40px auto 0;width:fit-content;}
-
-/* ── CONTENT ── */
-.content{background:#111;}
-.va-header{background:#111;border-bottom:1px solid #222;padding:24px 24px 20px;text-align:center;}
-.va-header-sub{font-size:11px;letter-spacing:3px;color:#c8102e;font-weight:500;text-transform:uppercase;margin-bottom:6px;}
-.va-header-title{font-size:20px;font-weight:500;color:#fff;}
-.va-header-title span{color:#c8102e;}
-
-.section{max-width:960px;margin:0 auto;padding:40px 20px 0;}
-.section-label{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
-.section-label-text{font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:500;color:#c8102e;white-space:nowrap;}
-.section-label-line{flex:1;height:1px;background:#333;}
-
-.grid-senior{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
-.grid-coaches{display:grid;gap:16px;}
-.coaches-row{display:grid;gap:16px;}
-.coaches-row-top{grid-template-columns:repeat(4,1fr);}
-.coaches-row-bottom{grid-template-columns:repeat(5,1fr);}
-
-@media(max-width:640px){
-  .grid-senior{grid-template-columns:repeat(2,1fr);}
-  .coaches-row-top{grid-template-columns:repeat(2,1fr);}
-  .coaches-row-bottom{grid-template-columns:repeat(2,1fr);}
+/* ── COACHES PAGE ── */
+.coaches-page{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:#111;
+  border-bottom:2px solid #c8102e;
+  padding:16px 16px 0;
+  overflow:hidden;
 }
+.coaches-page-header{text-align:center;margin-bottom:12px;flex-shrink:0;}
+.coaches-page-header-sub{font-size:10px;letter-spacing:3px;color:#c8102e;font-weight:500;text-transform:uppercase;margin-bottom:4px;}
+.coaches-page-header-title{font-size:16px;font-weight:500;color:#fff;}
+.coaches-page-header-title span{color:#c8102e;}
 
-.card{background:#1a1a1a;border:0.5px solid #333;border-radius:12px;overflow:hidden;cursor:pointer;transition:border-color 0.2s;display:flex;flex-direction:column;}
+/* Tier labels */
+.tier-label{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-shrink:0;}
+.tier-label-text{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:600;color:#c8102e;white-space:nowrap;}
+.tier-label-line{flex:1;height:1px;background:#333;}
+
+/* Grids */
+.coaches-body{flex:1;display:flex;flex-direction:column;gap:10px;min-height:0;}
+.senior-block,.coaches-block{display:flex;flex-direction:column;gap:6px;}
+.grid-senior{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.grid-coaches-top{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.grid-coaches-bottom{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;}
+
+/* Compact card */
+.card{background:#1a1a1a;border:0.5px solid #333;border-radius:8px;overflow:hidden;cursor:pointer;transition:border-color 0.2s;display:flex;flex-direction:column;}
 .card:hover{border-color:#c8102e;}
-.card-top{background:#c8102e;padding:20px 16px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;}
-.avatar{width:88px;height:88px;border-radius:50%;border:3px solid #fff;margin:0 auto 10px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:500;color:#fff;flex-shrink:0;}
+.card-top{background:#c8102e;padding:8px 8px 6px;text-align:center;display:flex;flex-direction:column;align-items:center;}
+.avatar{width:44px;height:44px;border-radius:50%;border:2px solid #fff;margin:0 auto 5px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff;flex-shrink:0;}
 .avatar img{width:100%;height:100%;object-fit:cover;object-position:top center;}
-.card-name{font-size:16px;font-weight:600;color:#fff;}
-.card-specialty{font-size:11px;color:rgba(255,255,255,0.85);margin-top:6px;line-height:1.4;display:flex;align-items:center;justify-content:center;}
-.chevron{display:inline-block;width:16px;height:16px;margin-top:8px;transition:transform 0.3s;}
-.chevron svg{width:16px;height:16px;fill:none;stroke:rgba(255,255,255,0.7);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.card-name{font-size:11px;font-weight:600;color:#fff;line-height:1.2;}
+.card-specialty{font-size:9px;color:rgba(255,255,255,0.82);margin-top:3px;line-height:1.3;display:flex;align-items:center;justify-content:center;text-align:center;}
+.chevron{display:inline-block;width:10px;height:10px;margin-top:4px;transition:transform 0.3s;}
+.chevron svg{width:10px;height:10px;fill:none;stroke:rgba(255,255,255,0.7);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
 .card.open .chevron{transform:rotate(180deg);}
-.card-details{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
-.card-details.open{max-height:700px;}
-.card-body{padding:14px 16px 16px;}
-.section-block{margin-bottom:12px;}
-.block-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#c8102e;font-weight:500;margin-bottom:6px;}
-.block-text{font-size:12px;color:#ccc;line-height:1.6;}
+
+/* Dropdown details */
+.card-details{max-height:0;overflow:hidden;transition:max-height 0.4s ease;position:absolute;z-index:100;background:#1a1a1a;border:0.5px solid #c8102e;border-radius:8px;width:220px;box-shadow:0 8px 32px rgba(0,0,0,0.7);}
+.card-details.open{max-height:500px;}
+.card-wrapper{position:relative;}
+.card-body{padding:10px 12px 12px;}
+.section-block{margin-bottom:10px;}
+.block-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#c8102e;font-weight:500;margin-bottom:4px;}
+.block-text{font-size:11px;color:#ccc;line-height:1.5;}
 .qual-list{list-style:none;padding:0;margin:0;}
-.qual-list li{font-size:12px;color:#ccc;line-height:1.5;padding:2px 0 2px 12px;position:relative;}
-.qual-list li::before{content:'';position:absolute;left:0;top:8px;width:4px;height:4px;background:#c8102e;border-radius:50%;}
-.fav-ex{display:inline-block;background:#c8102e;color:#fff;font-size:10px;padding:3px 8px;border-radius:4px;margin-top:4px;}
-.divider{height:0.5px;background:#2a2a2a;margin:10px 0;}
+.qual-list li{font-size:11px;color:#ccc;line-height:1.4;padding:1px 0 1px 10px;position:relative;}
+.qual-list li::before{content:'';position:absolute;left:0;top:7px;width:3px;height:3px;background:#c8102e;border-radius:50%;}
+.fav-ex{display:inline-block;background:#c8102e;color:#fff;font-size:9px;padding:2px 6px;border-radius:3px;margin-top:3px;}
+.divider{height:0.5px;background:#2a2a2a;margin:8px 0;}
 
 /* ── CONTACT ── */
 .contact-section{max-width:560px;margin:48px auto 0;padding:0 20px 60px;}
+.section-label{display:flex;align-items:center;gap:12px;margin-bottom:20px;}
+.section-label-text{font-size:11px;letter-spacing:3px;text-transform:uppercase;font-weight:500;color:#c8102e;white-space:nowrap;}
+.section-label-line{flex:1;height:1px;background:#333;}
 .contact-card{background:#1a1a1a;border:0.5px solid #333;border-radius:12px;padding:28px 24px;}
 .contact-title{font-size:20px;font-weight:600;color:#fff;margin-bottom:8px;}
 .contact-sub{font-size:13px;color:#888;margin-bottom:24px;line-height:1.6;}
@@ -111,35 +117,39 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
   </div>
 </section>
 
-<!-- COACHES -->
-<div class="content" id="coaches">
-  <div class="va-header">
-    <div class="va-header-sub">Holland Village</div>
-    <div class="va-header-title">Virgin <span>Active</span> &mdash; Meet Your Coaches</div>
+<!-- COACHES PAGE (full viewport) -->
+<section class="coaches-page" id="coaches">
+  <div class="coaches-page-header">
+    <div class="coaches-page-header-sub">Holland Village</div>
+    <div class="coaches-page-header-title">Virgin <span>Active</span> &mdash; Our Coaching Team</div>
   </div>
 
-  <div class="section">
-    <div class="section-label"><div class="section-label-text">Senior Coaches</div><div class="section-label-line"></div></div>
-    <div class="grid-senior" id="senior-grid"></div>
-  </div>
+  <div class="coaches-body">
+    <!-- Senior Coaches -->
+    <div class="senior-block">
+      <div class="tier-label"><div class="tier-label-text">Senior Coaches</div><div class="tier-label-line"></div></div>
+      <div class="grid-senior" id="senior-grid"></div>
+    </div>
 
-  <div class="section" style="margin-top:36px;">
-    <div class="section-label"><div class="section-label-text">Coaches</div><div class="section-label-line"></div></div>
-    <div class="grid-coaches">
-      <div class="coaches-row coaches-row-top" id="coach-grid-top"></div>
-      <div class="coaches-row coaches-row-bottom" id="coach-grid-bottom"></div>
+    <!-- Coaches -->
+    <div class="coaches-block">
+      <div class="tier-label"><div class="tier-label-text">Coaches</div><div class="tier-label-line"></div></div>
+      <div class="grid-coaches-top" id="coach-grid-top"></div>
+      <div class="grid-coaches-bottom" id="coach-grid-bottom"></div>
     </div>
   </div>
 
-  <!-- Arrow from coaches section to contact form -->
+  <!-- Arrow to contact form -->
   <div class="coaches-scroll-cue scroll-cue" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
     <div class="scroll-cue-label">Get in Touch</div>
     <div class="scroll-cue-arrow"></div>
   </div>
+</section>
 
-  <!-- CONTACT FORM -->
-  <div class="contact-section" id="contact">
-    <div class="section-label" style="margin-bottom:20px;">
+<!-- CONTACT FORM -->
+<div id="contact">
+  <div class="contact-section">
+    <div class="section-label">
       <div class="section-label-text">Contact Us</div>
       <div class="section-label-line"></div>
     </div>
@@ -200,19 +210,23 @@ const coaches = [
 ];
 
 const chevronSVG = `<svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
+let openIdx = null;
 
 function buildCard(t, idx) {
   const quals = t.qualifications.map(q => `<li>${q}</li>`).join('');
   const av = t.img ? `<img src="${t.img}" alt="${t.name}" />` : t.name.substring(0,2).toUpperCase();
-  return `<div class="card" id="card-${idx}" onclick="toggleCard(${idx})">
-    <div class="card-top">
-      <div class="avatar">${av}</div>
-      <div class="card-name">${t.name}</div>
-      <div class="card-specialty">${t.specialty}</div>
-      <div class="chevron">${chevronSVG}</div>
+  return `<div class="card-wrapper">
+    <div class="card" id="card-${idx}" onclick="toggleCard(event,${idx})">
+      <div class="card-top">
+        <div class="avatar">${av}</div>
+        <div class="card-name">${t.name}</div>
+        <div class="card-specialty" id="spec-${idx}">${t.specialty}</div>
+        <div class="chevron">${chevronSVG}</div>
+      </div>
     </div>
     <div class="card-details" id="details-${idx}">
       <div class="card-body">
+        <div style="font-size:12px;font-weight:600;color:#fff;margin-bottom:8px;">${t.name}</div>
         <div class="section-block">
           <div class="block-label">Qualifications</div>
           <ul class="qual-list">${quals}</ul>
@@ -236,29 +250,61 @@ document.getElementById('senior-grid').innerHTML = seniors.map((t,i) => buildCar
 document.getElementById('coach-grid-top').innerHTML = coaches.slice(0,4).map((t,i) => buildCard(t,i+10)).join('');
 document.getElementById('coach-grid-bottom').innerHTML = coaches.slice(4).map((t,i) => buildCard(t,i+14)).join('');
 
-function equaliseSpecialtyHeights(containerSelector) {
-  const containers = document.querySelectorAll(containerSelector);
-  containers.forEach(container => {
-    const specialties = container.querySelectorAll('.card-specialty');
-    let maxH = 0;
-    specialties.forEach(el => { el.style.minHeight = ''; maxH = Math.max(maxH, el.offsetHeight); });
-    specialties.forEach(el => el.style.minHeight = maxH + 'px');
-  });
+function equaliseSpecialtyHeights(gridId) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+  const specs = grid.querySelectorAll('.card-specialty');
+  let maxH = 0;
+  specs.forEach(el => { el.style.minHeight=''; maxH = Math.max(maxH, el.offsetHeight); });
+  specs.forEach(el => el.style.minHeight = maxH+'px');
 }
 
 window.addEventListener('load', () => {
-  equaliseSpecialtyHeights('.grid-senior');
-  equaliseSpecialtyHeights('.coaches-row-top');
-  equaliseSpecialtyHeights('.coaches-row-bottom');
+  equaliseSpecialtyHeights('senior-grid');
+  equaliseSpecialtyHeights('coach-grid-top');
+  equaliseSpecialtyHeights('coach-grid-bottom');
 });
 
-function toggleCard(idx) {
+function toggleCard(e, idx) {
+  e.stopPropagation();
   const card = document.getElementById('card-'+idx);
   const details = document.getElementById('details-'+idx);
-  const isOpen = card.classList.contains('open');
-  card.classList.toggle('open', !isOpen);
-  details.classList.toggle('open', !isOpen);
+  const isOpen = details.classList.contains('open');
+
+  // Close previously open card
+  if (openIdx !== null && openIdx !== idx) {
+    document.getElementById('card-'+openIdx).classList.remove('open');
+    document.getElementById('details-'+openIdx).classList.remove('open');
+  }
+
+  if (isOpen) {
+    card.classList.remove('open');
+    details.classList.remove('open');
+    openIdx = null;
+  } else {
+    // Position dropdown
+    const cardRect = card.getBoundingClientRect();
+    const pageRect = document.getElementById('coaches').getBoundingClientRect();
+    details.style.top = (cardRect.bottom - pageRect.top + 6) + 'px';
+    const left = cardRect.left - pageRect.left;
+    const detailsWidth = 220;
+    const pageWidth = pageRect.width;
+    details.style.left = Math.min(left, pageWidth - detailsWidth - 8) + 'px';
+
+    card.classList.add('open');
+    details.classList.add('open');
+    openIdx = idx;
+  }
 }
+
+// Close dropdown when clicking outside
+document.addEventListener('click', () => {
+  if (openIdx !== null) {
+    document.getElementById('card-'+openIdx).classList.remove('open');
+    document.getElementById('details-'+openIdx).classList.remove('open');
+    openIdx = null;
+  }
+});
 
 function showForm() {
   document.getElementById('thankyou').style.display = 'none';
@@ -280,14 +326,12 @@ document.getElementById('contact-form').addEventListener('submit', async functio
     const res = await fetch('https://formspree.io/f/mbdbgeyp', {
       method: 'POST',
       body: new FormData(this),
-      headers: { 'Accept': 'application/json' }
+      headers: {'Accept':'application/json'}
     });
     if (res.ok) {
       document.getElementById('form-wrapper').style.display = 'none';
       document.getElementById('thankyou').style.display = 'block';
-    } else {
-      throw new Error('failed');
-    }
+    } else { throw new Error('failed'); }
   } catch(err) {
     this.removeEventListener('submit', arguments.callee);
     this.submit();
