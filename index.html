@@ -405,18 +405,21 @@ function fitFontToBox(innerEl, cardW, availH) {
 
 function openDrop(dropEl, innerEl, html, cardW, availH) {
   innerEl.innerHTML = html;
-  // Pre-fit font before revealing
   fitFontToBox(innerEl, cardW, availH - 16);
+  // Reset any inline styles left by closeDrop before animating in
+  dropEl.style.transition = 'none';
+  dropEl.style.opacity = '';
   dropEl.style.maxHeight = availH + 'px';
-  dropEl.classList.add('open');
+  requestAnimationFrame(() => {
+    dropEl.style.transition = '';
+    dropEl.classList.add('open');
+  });
 }
 function closeDrop(dropEl) {
-  // Instant close — disable transition temporarily so it snaps shut
   dropEl.style.transition = 'none';
   dropEl.classList.remove('open');
   dropEl.style.maxHeight = '0';
   dropEl.style.opacity = '0';
-  // Re-enable transition after one frame
   requestAnimationFrame(() => {
     dropEl.style.transition = '';
   });
