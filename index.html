@@ -405,13 +405,21 @@ function fitFontToBox(innerEl, cardW, availH) {
 
 function openDrop(dropEl, innerEl, html, cardW, availH) {
   innerEl.innerHTML = html;
+  // Pre-fit font before revealing
+  fitFontToBox(innerEl, cardW, availH - 16);
   dropEl.style.maxHeight = availH + 'px';
   dropEl.classList.add('open');
-  requestAnimationFrame(() => fitFontToBox(innerEl, cardW, availH - 16));
 }
 function closeDrop(dropEl) {
+  // Instant close — disable transition temporarily so it snaps shut
+  dropEl.style.transition = 'none';
   dropEl.classList.remove('open');
   dropEl.style.maxHeight = '0';
+  dropEl.style.opacity = '0';
+  // Re-enable transition after one frame
+  requestAnimationFrame(() => {
+    dropEl.style.transition = '';
+  });
 }
 
 function getAvailH(pageId, rowId, extraRowH) {
@@ -447,15 +455,19 @@ function toggleSenior(idx){
   const inner=document.getElementById('sdrop-inner-'+idx);
   const card=document.getElementById('sc-'+idx);
   if(activeSenior===idx){ closeDrop(drop); card.classList.remove('active'); activeSenior=null; return; }
+  // Close previous instantly
   if(activeSenior!==null){
     closeDrop(document.getElementById('sdrop-'+activeSenior));
     document.getElementById('sc-'+activeSenior).classList.remove('active');
   }
   activeSenior=idx;
   card.classList.add('active');
-  const cardW = card.offsetWidth;
-  const avail = getAvailH('senior-page','senior-row',0);
-  openDrop(drop, inner, buildDropHTML(seniors[idx]), cardW, avail);
+  // Open new on next frame so layout has settled after close
+  requestAnimationFrame(() => {
+    const cardW = card.offsetWidth;
+    const avail = getAvailH('senior-page','senior-row',0);
+    openDrop(drop, inner, buildDropHTML(seniors[idx]), cardW, avail);
+  });
 }
 
 // COACH CARDS
@@ -489,17 +501,21 @@ function toggleCoach(idx){
   if(activeCoach&&activeCoach.idx===idx){
     closeDrop(drop); card.classList.remove('active'); activeCoach=null; return;
   }
+  // Close previous instantly
   if(activeCoach){
     closeDrop(document.getElementById('cdrop-'+activeCoach.idx));
     document.getElementById('cc-'+activeCoach.idx).classList.remove('active');
   }
   activeCoach={idx,row};
   card.classList.add('active');
-  const cardW = card.offsetWidth;
-  const otherRowEl=document.getElementById('coach-row-'+otherRow);
-  const otherH = otherRowEl ? otherRowEl.offsetHeight + 8 : 0;
-  const avail = getAvailH('coaches-page','coach-row-'+row, row===1 ? otherH : 0);
-  openDrop(drop, inner, buildDropHTML(coaches[idx]), cardW, avail);
+  // Open new on next frame so layout has settled after close
+  requestAnimationFrame(() => {
+    const cardW = card.offsetWidth;
+    const otherRowEl=document.getElementById('coach-row-'+otherRow);
+    const otherH = otherRowEl ? otherRowEl.offsetHeight + 8 : 0;
+    const avail = getAvailH('coaches-page','coach-row-'+row, row===1 ? otherH : 0);
+    openDrop(drop, inner, buildDropHTML(coaches[idx]), cardW, avail);
+  });
 }
 
 // Equalise specialty heights
