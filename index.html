@@ -9,8 +9,8 @@
 html,body{width:100%;height:100%;overflow:hidden;}
 body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
 
-.h-scroll{display:flex;width:200vw;height:100vh;transition:transform 0.6s cubic-bezier(0.77,0,0.18,1);}
-.h-scroll.show-pricing{transform:translateX(-100vw);}
+.h-scroll{display:flex;width:300vw;height:100vh;transition:transform 0.6s cubic-bezier(0.77,0,0.18,1);}
+.h-scroll.show-pricing{transform:translateX(-200vw);}.h-scroll.show-hyrox{transform:translateX(-100vw);}
 .h-panel{width:100vw;height:100vh;flex-shrink:0;overflow:hidden;position:relative;}
 .v-scroll{width:100%;height:100vh;overflow-y:auto;scroll-behavior:smooth;scrollbar-width:none;scroll-snap-type:y mandatory;}
 .v-scroll::-webkit-scrollbar{display:none;}
@@ -61,6 +61,8 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
 .hint-label{font-size:clamp(9px,1.3vw,11px);letter-spacing:1.5px;text-transform:uppercase;color:#888;text-align:center;}
 .hint-arrow-down{width:20px;height:20px;border-right:2px solid #c8102e;border-bottom:2px solid #c8102e;transform:rotate(45deg);animation:bounce 1.6s infinite;}
 .hint-arrow-right{width:20px;height:20px;border-right:2px solid #c8102e;border-top:2px solid #c8102e;transform:rotate(45deg);animation:bounceR 1.6s infinite;}
+.hint-arrow-left-hint{width:20px;height:20px;border-left:2px solid #c8102e;border-top:2px solid #c8102e;transform:rotate(-45deg);animation:bounceL 1.6s infinite;}
+@keyframes bounceL{0%,100%{transform:rotate(-45deg) translateX(0);}50%{transform:rotate(-45deg) translateX(-5px);}}
 @keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0);}50%{transform:rotate(45deg) translateY(5px);}}
 @keyframes bounceR{0%,100%{transform:rotate(45deg) translateX(0);}50%{transform:rotate(45deg) translateX(5px);}}
 
@@ -92,9 +94,9 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
 .fav-ex{display:inline-block;background:#c8102e;color:#fff;padding:2px 7px;border-radius:4px;margin-top:3px;}
 
 /* Per-card dropdown */
-.card-wrap{display:flex;flex-direction:column;align-items:center;}
+.card-wrap{display:flex;flex-direction:column;align-items:stretch;}
 .card-dropdown{
-  width:100%;
+  width:100%;       /* exactly the card width — card-wrap controls the width */
   overflow:hidden;
   max-height:0;
   opacity:0;
@@ -111,6 +113,8 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
   border-radius:8px;
   padding:8px 10px;
   overflow:hidden;
+  width:100%;
+  word-break:break-word;
 }
 .drop-section{margin-bottom:6px;}
 .drop-section:last-child{margin-bottom:0;}
@@ -196,7 +200,7 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
 .pkg-tag{padding:14px 16px;background:#1a1a1a;border-left:0.5px solid #2a2a2a;}
 .pkg-tag-label{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#c8102e;font-weight:600;margin-bottom:2px;}
 .pkg-tag-desc{font-size:11px;color:#666;line-height:1.4;}
-.pkg-features{display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #2a2a2a;}
+.pkg-features{display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #2a2a2a;}.pkg-features.single{grid-template-columns:1fr;}
 .pkg-col{padding:12px 16px;}
 .pkg-col:first-child{border-right:0.5px solid #2a2a2a;}
 .pkg-feature{display:flex;align-items:flex-start;gap:8px;margin-bottom:7px;font-size:12px;color:#bbb;line-height:1.4;}
@@ -224,6 +228,12 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
           <div class="landing-eyebrow">Virgin Active &mdash; Holland Village</div>
           <div class="landing-title">Meet your coaches<br>at <span>SHV!</span></div>
         </div>
+        <!-- Left hint: HYROX -->
+        <div class="landing-right-hint" style="right:auto;left:20px;" onclick="goToHyrox()">
+          <div class="hint-arrow-left-hint"></div>
+          <div class="hint-label">HYROX PT</div>
+        </div>
+        <!-- Right hint: PT Price List -->
         <div class="landing-right-hint" onclick="goToPricing()">
           <div class="hint-label">PT price list</div>
           <div class="hint-arrow-right"></div>
@@ -314,6 +324,118 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
     </div>
   </div>
 
+  <!-- HYROX PANEL -->
+  <div class="h-panel" id="hyrox-panel" style="background:#000;">
+    <div style="width:100%;height:100%;background:#000;overflow-y:auto;scrollbar-width:none;padding:0 0 60px;">
+      <div style="overflow:hidden;border-bottom:3px solid #FFD700;position:relative;">
+        <!-- SVG race background -->
+        <svg style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0.15;" viewBox="0 0 800 220" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <rect width="800" height="220" fill="#000"/>
+          <line x1="0" y1="55" x2="800" y2="55" stroke="#FFD700" stroke-width="1" stroke-dasharray="30,20"/>
+          <line x1="0" y1="110" x2="800" y2="110" stroke="#FFD700" stroke-width="1" stroke-dasharray="30,20"/>
+          <line x1="0" y1="165" x2="800" y2="165" stroke="#FFD700" stroke-width="1" stroke-dasharray="30,20"/>
+          <g transform="translate(80,60)"><ellipse cx="0" cy="-22" rx="8" ry="8" fill="#FFD700"/><line x1="0" y1="-14" x2="0" y2="10" stroke="#FFD700" stroke-width="3"/><line x1="0" y1="0" x2="-14" y2="20" stroke="#FFD700" stroke-width="2.5"/><line x1="0" y1="0" x2="10" y2="18" stroke="#FFD700" stroke-width="2.5"/><line x1="0" y1="-8" x2="-12" y2="4" stroke="#FFD700" stroke-width="2"/><line x1="0" y1="-8" x2="14" y2="0" stroke="#FFD700" stroke-width="2"/></g>
+          <g transform="translate(200,60)"><ellipse cx="0" cy="-22" rx="8" ry="8" fill="#FFD700"/><line x1="0" y1="-14" x2="-4" y2="10" stroke="#FFD700" stroke-width="3"/><line x1="-2" y1="2" x2="-16" y2="18" stroke="#FFD700" stroke-width="2.5"/><line x1="-2" y1="2" x2="12" y2="16" stroke="#FFD700" stroke-width="2.5"/><line x1="0" y1="-8" x2="-14" y2="2" stroke="#FFD700" stroke-width="2"/><line x1="0" y1="-8" x2="12" y2="-2" stroke="#FFD700" stroke-width="2"/></g>
+          <g transform="translate(340,115)"><ellipse cx="0" cy="-22" rx="8" ry="8" fill="#fff"/><line x1="0" y1="-14" x2="0" y2="10" stroke="#fff" stroke-width="3"/><line x1="0" y1="0" x2="-14" y2="20" stroke="#fff" stroke-width="2.5"/><line x1="0" y1="0" x2="10" y2="18" stroke="#fff" stroke-width="2.5"/><line x1="0" y1="-8" x2="-12" y2="4" stroke="#fff" stroke-width="2"/><line x1="0" y1="-8" x2="14" y2="0" stroke="#fff" stroke-width="2"/></g>
+          <g transform="translate(480,30)"><rect x="-4" y="0" width="8" height="60" fill="#FFD700" rx="2"/><rect x="-20" y="0" width="40" height="6" fill="#FFD700" rx="2"/><line x1="-16" y1="6" x2="-8" y2="35" stroke="#FFD700" stroke-width="2.5"/><line x1="16" y1="6" x2="8" y2="35" stroke="#FFD700" stroke-width="2.5"/><ellipse cx="0" cy="70" rx="7" ry="7" fill="#fff"/><line x1="0" y1="77" x2="0" y2="100" stroke="#fff" stroke-width="3"/><line x1="-16" y1="30" x2="0" y2="85" stroke="#fff" stroke-width="2"/><line x1="16" y1="30" x2="0" y2="85" stroke="#fff" stroke-width="2"/></g>
+          <g transform="translate(620,130)"><rect x="-35" y="0" width="70" height="20" fill="#FFD700" rx="3"/><line x1="-25" y1="20" x2="-25" y2="35" stroke="#FFD700" stroke-width="3"/><line x1="25" y1="20" x2="25" y2="35" stroke="#FFD700" stroke-width="3"/><rect x="-30" y="-15" width="60" height="15" fill="#FFD700" opacity="0.5" rx="2"/><ellipse cx="-50" cy="-30" rx="7" ry="7" fill="#fff"/><line x1="-50" y1="-23" x2="-40" y2="-5" stroke="#fff" stroke-width="2.5"/><line x1="-40" y1="-5" x2="-30" y2="0" stroke="#fff" stroke-width="2.5"/><line x1="-50" y1="-10" x2="-65" y2="10" stroke="#fff" stroke-width="2"/><line x1="-50" y1="-10" x2="-35" y2="5" stroke="#fff" stroke-width="2"/></g>
+          <line x1="0" y1="80" x2="60" y2="80" stroke="#FFD700" stroke-width="1" opacity="0.5"/><line x1="0" y1="90" x2="40" y2="90" stroke="#FFD700" stroke-width="0.5" opacity="0.3"/><line x1="120" y1="75" x2="160" y2="75" stroke="#FFD700" stroke-width="1" opacity="0.4"/>
+        </svg>
+        <div style="position:relative;z-index:2;background:linear-gradient(135deg,rgba(0,0,0,0.93),rgba(10,8,0,0.90));padding:28px 24px 0;">
+          <div style="font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#FFD700;font-weight:600;margin-bottom:10px;">Virgin Active &mdash; Holland Village</div>
+          <div style="font-size:clamp(20px,3.5vw,32px);font-weight:800;color:#fff;line-height:1.15;margin-bottom:2px;">HYROX <span style="color:#FFD700;">Personal Training</span></div>
+          <div style="font-size:clamp(20px,3.5vw,32px);font-weight:800;color:#FFD700;line-height:1.15;margin-bottom:20px;">Packages</div>
+          <div style="display:flex;max-width:760px;margin:0 auto;border-bottom:1px solid #333;">
+            <div id="htab-btn-packages" onclick="switchHyroxTab('packages')" style="flex:1;padding:12px 0;text-align:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;cursor:pointer;color:#FFD700;border-bottom:2px solid #FFD700;margin-bottom:-1px;">Packages</div>
+            <div id="htab-btn-coaches" onclick="switchHyroxTab('coaches')" style="flex:1;padding:12px 0;text-align:center;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:600;cursor:pointer;color:#555;border-bottom:2px solid transparent;margin-bottom:-1px;">HYROX Coaches</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PACKAGES TAB -->
+      <div id="htab-packages" style="display:block;max-width:760px;margin:0 auto;padding:24px;">
+
+        <!-- Price table -->
+        <div style="background:#111;border:1px solid #FFD700;border-radius:12px;overflow:hidden;margin-bottom:20px;">
+          <div style="background:#FFD700;padding:12px 16px;">
+            <div style="font-size:13px;font-weight:800;color:#000;letter-spacing:1px;text-transform:uppercase;">HYROX PT Packages</div>
+          </div>
+          <table style="width:100%;border-collapse:collapse;">
+            <thead>
+              <tr style="border-bottom:0.5px solid #333;">
+                <th style="padding:10px 14px;text-align:left;color:#FFD700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Package</th>
+                <th style="padding:10px 14px;text-align:center;color:#FFD700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Price</th>
+                <th style="padding:10px 14px;text-align:center;color:#FFD700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Sessions</th>
+                <th style="padding:10px 14px;text-align:center;color:#FFD700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;font-weight:600;">Validity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:0.5px solid #222;"><td style="padding:10px 14px;color:#fff;font-weight:500;font-size:13px;">Intro</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">$500.00</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">3</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">1 month</td></tr>
+              <tr style="border-bottom:0.5px solid #222;"><td style="padding:10px 14px;color:#fff;font-weight:500;font-size:13px;">HYROX Go</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">$1,800.00</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">12</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">4 months</td></tr>
+              <tr style="border-bottom:0.5px solid #222;"><td style="padding:10px 14px;color:#fff;font-weight:500;font-size:13px;">HYROX Performance</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">$3,400.00</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">24</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">6 months</td></tr>
+              <tr style="border-bottom:0.5px solid #222;"><td style="padding:10px 14px;color:#fff;font-weight:500;font-size:13px;">Go Buddy</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">$2,400.00</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">12</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">4 months</td></tr>
+              <tr><td style="padding:10px 14px;color:#fff;font-weight:500;font-size:13px;">Performance Buddy</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">$4,500.00</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">24</td><td style="padding:10px 14px;text-align:center;color:#ccc;font-size:13px;">6 months</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Package description cards -->
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:#111;border:0.5px solid #333;border-radius:12px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #333;">
+              <div style="background:#000;padding:14px 16px;display:flex;align-items:center;"><div style="font-size:13px;font-weight:700;color:#FFD700;letter-spacing:1px;text-transform:uppercase;">Intro</div></div>
+              <div style="padding:14px 16px;border-left:0.5px solid #333;"><div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#FFD700;font-weight:600;margin-bottom:2px;">3 Sessions &bull; 1 Month</div><div style="font-size:11px;color:#888;">$500.00</div></div>
+            </div>
+            <div style="padding:12px 16px;font-size:12px;color:#ccc;line-height:1.55;"><span style="color:#FFD700;margin-right:6px;">✔</span>A short introductory package designed to assess your current fitness level, introduce HYROX-style training, and build confidence before progressing further.</div>
+          </div>
+
+          <div style="background:#111;border:0.5px solid #333;border-radius:12px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #333;">
+              <div style="background:#000;padding:14px 16px;display:flex;align-items:center;"><div style="font-size:13px;font-weight:700;color:#FFD700;letter-spacing:1px;text-transform:uppercase;">HYROX Go</div></div>
+              <div style="padding:14px 16px;border-left:0.5px solid #333;"><div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#FFD700;font-weight:600;margin-bottom:2px;">12 Sessions &bull; 4 Months</div><div style="font-size:11px;color:#888;">$1,800.00</div></div>
+            </div>
+            <div style="padding:12px 16px;font-size:12px;color:#ccc;line-height:1.55;"><span style="color:#FFD700;margin-right:6px;">✔</span>A structured starter package for members who want consistent coaching, improved fitness, and a clear pathway into HYROX training.</div>
+          </div>
+
+          <div style="background:#111;border:0.5px solid #333;border-radius:12px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #333;">
+              <div style="background:#000;padding:14px 16px;display:flex;align-items:center;"><div style="font-size:13px;font-weight:700;color:#FFD700;letter-spacing:1px;text-transform:uppercase;">HYROX Performance</div></div>
+              <div style="padding:14px 16px;border-left:0.5px solid #333;"><div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#FFD700;font-weight:600;margin-bottom:2px;">24 Sessions &bull; 6 Months</div><div style="font-size:11px;color:#888;">$3,400.00</div></div>
+            </div>
+            <div style="padding:12px 16px;font-size:12px;color:#ccc;line-height:1.55;"><span style="color:#FFD700;margin-right:6px;">✔</span>A complete performance-focused package designed to improve strength, running, conditioning, and event-specific HYROX readiness.</div>
+          </div>
+
+          <div style="background:#111;border:0.5px solid #333;border-radius:12px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #333;">
+              <div style="background:#000;padding:14px 16px;display:flex;align-items:center;"><div style="font-size:13px;font-weight:700;color:#FFD700;letter-spacing:1px;text-transform:uppercase;">Go Buddy</div></div>
+              <div style="padding:14px 16px;border-left:0.5px solid #333;"><div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#FFD700;font-weight:600;margin-bottom:2px;">12 Sessions &bull; 4 Months</div><div style="font-size:11px;color:#888;">$2,400.00</div></div>
+            </div>
+            <div style="padding:12px 16px;font-size:12px;color:#ccc;line-height:1.55;"><span style="color:#FFD700;margin-right:6px;">✔</span>A shared training package for two members who want to train together, stay accountable, and build confidence through HYROX-style coaching.</div>
+          </div>
+
+          <div style="background:#111;border:0.5px solid #333;border-radius:12px;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:0.5px solid #333;">
+              <div style="background:#000;padding:14px 16px;display:flex;align-items:center;"><div style="font-size:13px;font-weight:700;color:#FFD700;letter-spacing:1px;text-transform:uppercase;">Performance Buddy</div></div>
+              <div style="padding:14px 16px;border-left:0.5px solid #333;"><div style="font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#FFD700;font-weight:600;margin-bottom:2px;">24 Sessions &bull; 6 Months</div><div style="font-size:11px;color:#888;">$4,500.00</div></div>
+            </div>
+            <div style="padding:12px 16px;font-size:12px;color:#ccc;line-height:1.55;"><span style="color:#FFD700;margin-right:6px;">✔</span>A premium buddy package for two members looking to prepare seriously for HYROX with tailored coaching, accountability, and performance-focused programming.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HYROX COACHES TAB -->
+      <div id="htab-coaches" style="display:none;max-width:760px;margin:0 auto;padding:24px;">
+        <div style="margin-bottom:14px;"><span style="display:inline-block;background:#FFD700;color:#000;font-size:10px;font-weight:800;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:4px;">&#x1F3C5; L1 HYROX Certified Coaches</span></div>
+        <div id="hyrox-coaches-grid" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:stretch;gap:12px;"></div>
+        <div style="margin:20px auto 0;background:#111;border:0.5px solid #333;border-radius:12px;padding:14px 18px;">
+          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#FFD700;font-weight:600;margin-bottom:6px;">About HYROX Training</div>
+          <div style="font-size:12px;color:#ccc;line-height:1.6;">HYROX is a global fitness race combining 8km of running with 8 functional workout stations. Our L1 HYROX Certified Coaches are trained to prepare you for race day — whether you're a first-timer or a competitive racer.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- PRICING -->
   <div class="h-panel">
     <div class="pricing-panel">
@@ -345,7 +467,12 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
   </div>
 </div>
 
+<!-- Back arrow: pricing → coaches/landing -->
 <button class="h-arrow-left" id="arrowLeft" onclick="goToCoaches()">
+  <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+</button>
+<!-- Back arrow: HYROX → landing -->
+<button class="h-arrow-left" id="arrowHyroxBack" style="left:16px;opacity:0;pointer-events:none;" onclick="goToLanding()">
   <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
 </button>
 
@@ -525,8 +652,69 @@ function toggleCoach(idx){
 function eq(id){const r=document.getElementById(id);if(!r)return;const s=r.querySelectorAll('.card-specialty');let m=0;s.forEach(el=>{el.style.minHeight='';m=Math.max(m,el.offsetHeight);});s.forEach(el=>el.style.minHeight=m+'px');}
 window.addEventListener('load',()=>{eq('senior-row');eq('coach-row-1');eq('coach-row-2');});
 
-function goToPricing(){document.getElementById('hscroll').classList.add('show-pricing');document.getElementById('arrowLeft').style.cssText='opacity:1;pointer-events:all';}
-function goToCoaches(){document.getElementById('hscroll').classList.remove('show-pricing');document.getElementById('arrowLeft').style.cssText='opacity:0;pointer-events:none';}
+function goToPricing(){
+  const hs=document.getElementById('hscroll');
+  hs.classList.remove('show-hyrox');
+  hs.classList.add('show-pricing');
+  document.getElementById('arrowLeft').style.cssText='opacity:1;pointer-events:all';
+  document.getElementById('arrowHyroxBack').style.cssText='left:16px;opacity:0;pointer-events:none';
+}
+function goToCoaches(){
+  const hs=document.getElementById('hscroll');
+  hs.classList.remove('show-pricing');
+  hs.classList.remove('show-hyrox');
+  document.getElementById('arrowLeft').style.cssText='opacity:0;pointer-events:none';
+  document.getElementById('arrowHyroxBack').style.cssText='left:16px;opacity:0;pointer-events:none';
+}
+function goToHyrox(){
+  const hs=document.getElementById('hscroll');
+  hs.classList.remove('show-pricing');
+  hs.classList.add('show-hyrox');
+  document.getElementById('arrowLeft').style.cssText='opacity:0;pointer-events:none';
+  document.getElementById('arrowHyroxBack').style.cssText='left:16px;opacity:1;pointer-events:all';
+}
+function goToLanding(){
+  goToCoaches();
+}
+const HYROX_NAMES = ['Zul','Nadiah','Darren','Wen Bin','Benjamin','Arianna','Hanney'];
+
+function buildHyroxCoachCards() {
+  const grid = document.getElementById('hyrox-coaches-grid');
+  if (grid.children.length > 0) return; // already built
+  const allTrainers = [...seniors, ...coaches];
+  HYROX_NAMES.forEach(name => {
+    const t = allTrainers.find(x => x.name === name);
+    if (!t) return;
+    const tier = seniors.find(x => x.name === name) ? 'Senior Coach' : 'Coach';
+    const av = t.img ? `<img src="${t.img}" style="width:100%;height:100%;object-fit:cover;object-position:top center;border-radius:50%;" alt="${t.name}"/>` : t.name.substring(0,2).toUpperCase();
+    const card = document.createElement('div');
+    card.style.cssText = 'display:flex;flex-direction:column;background:#111;border:1px solid #FFD700;border-radius:10px;overflow:hidden;width:150px;flex-shrink:0;';
+    card.innerHTML = `<div style="background:#000;width:100%;padding:12px 8px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;flex:1;border-bottom:1px solid #FFD700;">
+      <div style="width:68px;height:68px;border-radius:50%;border:2px solid #FFD700;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:600;color:#FFD700;margin-bottom:7px;flex-shrink:0;">${av}</div>
+      <div style="font-size:13px;font-weight:700;color:#FFD700;line-height:1.2;">${t.name}</div>
+      <div style="font-size:9px;color:rgba(255,215,0,0.7);margin-top:3px;">${tier}</div>
+      <div style="font-size:9px;color:rgba(255,255,255,0.7);margin-top:5px;line-height:1.3;text-align:center;flex:1;display:flex;align-items:center;justify-content:center;">${t.specialty}</div>
+    </div>
+    <div style="padding:8px 10px;width:100%;flex-shrink:0;background:#111;">
+      <div style="font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:#FFD700;font-weight:700;margin-bottom:4px;">🏅 HYROX L1</div>
+      <div style="font-size:10px;color:#aaa;line-height:1.4;">Certified HYROX Coach</div>
+    </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function switchHyroxTab(id){
+  ['packages','coaches'].forEach(tab => {
+    const btn = document.getElementById('htab-btn-'+tab);
+    if (!btn) return;
+    const active = tab === id;
+    btn.style.color = active ? '#FFD700' : '#555';
+    btn.style.borderBottom = active ? '2px solid #FFD700' : '2px solid transparent';
+    const panel = document.getElementById('htab-'+tab);
+    if (panel) panel.style.display = active ? 'block' : 'none';
+  });
+  if (id === 'coaches') buildHyroxCoachCards();
+}
 function switchTab(id){document.querySelectorAll('.pricing-tab').forEach((t,i)=>{t.classList.toggle('active',['coach','senior','promo'][i]===id);});document.querySelectorAll('.pricing-content').forEach(c=>c.classList.remove('active'));document.getElementById('tab-'+id).classList.add('active');}
 function showForm(){document.getElementById('thankyou').style.display='none';document.getElementById('form-wrapper').style.display='block';}
 if(window.location.search.includes('submitted=true')){document.getElementById('thankyou').style.display='block';document.getElementById('form-wrapper').style.display='none';history.replaceState({},'',window.location.pathname);}
