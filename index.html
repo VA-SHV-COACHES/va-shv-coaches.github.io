@@ -96,7 +96,7 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
 /* Per-card dropdown */
 .card-wrap{display:flex;flex-direction:column;align-items:stretch;}
 .card-dropdown{
-  width:100%;       /* exactly the card width — card-wrap controls the width */
+  width:100%;
   overflow:hidden;
   max-height:0;
   opacity:0;
@@ -111,14 +111,14 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
   background:#1a1a1a;
   border:1px solid #c8102e;
   border-radius:8px;
-  padding:8px 10px;
+  padding:10px 12px;
   overflow:hidden;
   width:100%;
   word-break:break-word;
 }
-.drop-section{margin-bottom:6px;}
+.drop-section{margin-bottom:7px;}
 .drop-section:last-child{margin-bottom:0;}
-.drop-divider{height:0.5px;background:#2a2a2a;margin:5px 0;}
+.drop-divider{height:0.5px;background:#2a2a2a;margin:7px 0;}
 
 /* ── CARDS — scale with viewport ── */
 .card{background:#1a1a1a;border:1px solid #2a2a2a;border-radius:10px;overflow:hidden;cursor:pointer;transition:border-color 0.2s,box-shadow 0.2s;flex-shrink:0;}
@@ -511,30 +511,30 @@ function buildDropHTML(t) {
     <div class="drop-section"><div class="block-label">Fav exercise</div><span class="fav-ex">${t.fav}</span></div>`;
 }
 
-// Probe for font fitting — same width as a card
+// Off-screen probe for binary-search font fitting
 const PROBE = document.createElement('div');
-PROBE.style.cssText = 'position:absolute;visibility:hidden;pointer-events:none;top:-9999px;left:0;overflow:hidden;background:#1a1a1a;padding:8px 10px;border-radius:8px;';
+PROBE.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;top:-9999px;left:-9999px;background:#1a1a1a;padding:10px 12px;border-radius:8px;overflow:hidden;box-sizing:border-box;';
 document.body.appendChild(PROBE);
 
 function fitFontToBox(innerEl, cardW, availH) {
   PROBE.style.width = cardW + 'px';
   PROBE.innerHTML = innerEl.innerHTML;
-  let fs = 11;
-  PROBE.style.fontSize = fs + 'px';
-  while (PROBE.scrollHeight > availH && fs > 7) {
-    fs -= 0.4;
-    PROBE.style.fontSize = fs + 'px';
+  let lo = 7.5, hi = 12, best = 8;
+  while (hi - lo > 0.25) {
+    const mid = (lo + hi) / 2;
+    PROBE.style.fontSize = mid + 'px';
+    if (PROBE.scrollHeight <= availH) { best = mid; lo = mid; }
+    else { hi = mid; }
   }
   PROBE.innerHTML = '';
-  innerEl.style.fontSize = fs + 'px';
-  innerEl.querySelectorAll('.block-label').forEach(el => el.style.fontSize = Math.max(6, fs * 0.82) + 'px');
-  innerEl.querySelectorAll('.fav-ex').forEach(el => el.style.fontSize = Math.max(6, fs * 0.82) + 'px');
+  innerEl.style.fontSize = best + 'px';
+  innerEl.querySelectorAll('.block-label').forEach(el => el.style.fontSize = Math.max(6.5, best * 0.8) + 'px');
+  innerEl.querySelectorAll('.fav-ex').forEach(el => el.style.fontSize = Math.max(6.5, best * 0.82) + 'px');
 }
 
 function openDrop(dropEl, innerEl, html, cardW, availH) {
   innerEl.innerHTML = html;
-  fitFontToBox(innerEl, cardW, availH - 16);
-  // Reset any inline styles left by closeDrop before animating in
+  fitFontToBox(innerEl, cardW, availH - 4);
   dropEl.style.transition = 'none';
   dropEl.style.opacity = '';
   dropEl.style.maxHeight = availH + 'px';
@@ -543,14 +543,13 @@ function openDrop(dropEl, innerEl, html, cardW, availH) {
     dropEl.classList.add('open');
   });
 }
+
 function closeDrop(dropEl) {
   dropEl.style.transition = 'none';
   dropEl.classList.remove('open');
   dropEl.style.maxHeight = '0';
   dropEl.style.opacity = '0';
-  requestAnimationFrame(() => {
-    dropEl.style.transition = '';
-  });
+  requestAnimationFrame(() => { dropEl.style.transition = ''; });
 }
 
 function getAvailH(pageId, rowId, extraRowH) {
@@ -644,7 +643,7 @@ function toggleCoach(idx){
     const cardW = card.offsetWidth;
     const otherRowEl=document.getElementById('coach-row-'+otherRow);
     const otherH = otherRowEl ? otherRowEl.offsetHeight + 8 : 0;
-    const avail = getAvailH('coaches-page','coach-row-'+row, row===1 ? otherH : 0);
+    const avail = Math.max(180, getAvailH('coaches-page','coach-row-'+row, row===1 ? otherH : 0));
     openDrop(drop, inner, buildDropHTML(coaches[idx]), cardW, avail);
   });
 }
