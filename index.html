@@ -14,7 +14,7 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
 .h-panel{width:100vw;height:100vh;flex-shrink:0;overflow:hidden;position:relative;}
 .v-scroll{width:100%;height:100vh;overflow-y:auto;scroll-behavior:smooth;scrollbar-width:none;scroll-snap-type:y mandatory;}
 .v-scroll::-webkit-scrollbar{display:none;}
-.snap-section{height:100vh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;background:#111;}
+.snap-section{height:100vh;scroll-snap-align:start;scroll-snap-stop:always;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;background:#111;overflow:visible;}
 .snap-section+.snap-section{border-top:2px solid #c8102e;}
 .contact-snap{height:100vh;scroll-snap-align:start;scroll-snap-stop:always;overflow-y:auto;background:#111;border-top:2px solid #c8102e;}
 
@@ -71,7 +71,7 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
   display:flex;flex-direction:column;align-items:center;
   width:100%;height:100%;
   padding:clamp(10px,2vh,20px) clamp(16px,2vw,24px) 48px;
-  /* bottom pad leaves room for page-cue */
+  overflow:visible;
 }
 .team-header{text-align:center;margin-bottom:clamp(6px,1vh,10px);width:100%;flex-shrink:0;}
 .team-eyebrow{font-size:clamp(8px,1.2vw,10px);letter-spacing:3px;color:#c8102e;font-weight:500;text-transform:uppercase;margin-bottom:3px;}
@@ -94,21 +94,34 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
 .fav-ex{display:inline-block;background:#c8102e;color:#fff;padding:2px 7px;border-radius:4px;margin-top:3px;}
 
 /* Per-card dropdown */
-.card-wrap{display:flex;flex-direction:column;align-items:stretch;}
-/* Shared detail panel — sits below the row, width = clicked card width */
-.detail-panel{
+/* card-wrap: position:relative anchor for the absolute dropdown */
+.card-wrap{
+  position:relative;
+  display:inline-flex;
+  flex-direction:column;
+  align-items:stretch;
+  flex-shrink:0;
+}
+/* Dropdown floats outside the flex flow — doesn't affect sibling card layout */
+.card-drop{
+  position:absolute;
+  top:100%;
+  left:0;
+  width:100%;
+  z-index:200;
   overflow:hidden;
   max-height:0;
   opacity:0;
   margin-top:0;
+  pointer-events:none;
   transition:max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease, margin-top 0.3s ease;
-  align-self:flex-start; /* don't stretch to full row width */
 }
-.detail-panel.open{
+.card-drop.open{
   opacity:1;
   margin-top:6px;
+  pointer-events:all;
 }
-.detail-panel-inner{
+.card-drop-inner{
   background:#1a1a1a;
   border:1px solid #c8102e;
   border-radius:8px;
@@ -254,9 +267,6 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
           <div class="tier-label"><div class="tier-label-text">Senior Coaches</div><div class="tier-label-line"></div></div>
           <div class="card-row" id="senior-row"></div>
           <!-- Shared detail panel for senior coaches -->
-          <div class="detail-panel" id="senior-detail-panel">
-            <div class="detail-panel-inner" id="senior-detail-inner"></div>
-          </div>
 
         </div>
         <div class="page-cue" onclick="document.getElementById('coaches-page').scrollIntoView({behavior:'smooth'})">
@@ -274,13 +284,7 @@ body{font-family:system-ui,sans-serif;background:#111;color:#fff;}
           </div>
           <div class="tier-label"><div class="tier-label-text">Coaches</div><div class="tier-label-line"></div></div>
           <div class="card-row" id="coach-row-1"></div>
-          <div class="detail-panel" id="coach-detail-panel-1">
-            <div class="detail-panel-inner" id="coach-detail-inner-1"></div>
-          </div>
           <div class="card-row" id="coach-row-2" style="margin-top:clamp(6px,1vh,10px);"></div>
-          <div class="detail-panel" id="coach-detail-panel-2">
-            <div class="detail-panel-inner" id="coach-detail-inner-2"></div>
-          </div>
 
         </div>
         <div class="page-cue" onclick="document.getElementById('contact-page').scrollIntoView({behavior:'smooth'})">
@@ -566,14 +570,15 @@ function getAvailH(pageId, rowId, extraRowH) {
   const row  = document.getElementById(rowId);
   const pageRect = page.getBoundingClientRect();
   const rowRect  = row.getBoundingClientRect();
-  return pageRect.bottom - rowRect.bottom - (extraRowH || 0) - 44;
+  // Absolute dropdown: space from card bottom to page bottom, minus cue and margin
+  return pageRect.bottom - rowRect.bottom - (extraRowH || 0) - 50;
 }
 
 // SENIOR CARDS
 let activeSenior = null;
 function buildSeniorCard(t,i){
   const av=t.img?`<img src="${t.img}" alt="${t.name}"/>`:(t.name.substring(0,2).toUpperCase());
-  return `<div class="card-wrap" id="swrap-${i}">
+  return `<div class="card-wrap">
     <div class="card senior-card" id="sc-${i}" onclick="toggleSenior(${i})">
       <div class="card-top">
         <div class="avatar">${av}</div>
@@ -582,29 +587,31 @@ function buildSeniorCard(t,i){
         <div class="chevron">${chevronSVG}</div>
       </div>
     </div>
+    <div class="card-drop" id="sdrop-${i}">
+      <div class="card-drop-inner" id="sdrop-inner-${i}"></div>
+    </div>
   </div>`;
 }
 document.getElementById('senior-row').innerHTML = seniors.map((t,i)=>buildSeniorCard(t,i)).join('');
 
 function toggleSenior(idx){
-  const panel=document.getElementById('senior-detail-panel');
-  const inner=document.getElementById('senior-detail-inner');
+  const drop=document.getElementById('sdrop-'+idx);
+  const inner=document.getElementById('sdrop-inner-'+idx);
   const card=document.getElementById('sc-'+idx);
-  const wrap=document.getElementById('swrap-'+idx);
   if(activeSenior===idx){
-    closeDrop(panel); card.classList.remove('active'); activeSenior=null; return;
+    closeDrop(drop); card.classList.remove('active'); activeSenior=null; return;
   }
-  if(activeSenior!==null) document.getElementById('sc-'+activeSenior).classList.remove('active');
-  // Snap close instantly then reopen
-  closeDrop(panel);
+  // Instantly close previous
+  if(activeSenior!==null){
+    closeDrop(document.getElementById('sdrop-'+activeSenior));
+    document.getElementById('sc-'+activeSenior).classList.remove('active');
+  }
   activeSenior=idx;
   card.classList.add('active');
   requestAnimationFrame(() => {
-    // Move panel to be a sibling right after this card's wrap in the DOM
-    wrap.after(panel);
     const cardW = card.offsetWidth;
     const avail = getAvailH('senior-page','senior-row',0);
-    openDrop(panel, inner, buildDropHTML(seniors[idx]), cardW, avail);
+    openDrop(drop, inner, buildDropHTML(seniors[idx]), cardW, avail);
   });
 }
 
@@ -612,7 +619,7 @@ function toggleSenior(idx){
 let activeCoach=null;
 function buildCoachCard(t,idx){
   const av=t.img?`<img src="${t.img}" alt="${t.name}"/>`:(t.name.substring(0,2).toUpperCase());
-  return `<div class="card-wrap" id="cwrap-${idx}">
+  return `<div class="card-wrap">
     <div class="card coach-card" id="cc-${idx}" onclick="toggleCoach(${idx})">
       <div class="card-top">
         <div class="avatar">${av}</div>
@@ -620,6 +627,9 @@ function buildCoachCard(t,idx){
         <div class="card-specialty" id="cspec-${idx}">${t.specialty}</div>
         <div class="chevron">${chevronSVG}</div>
       </div>
+    </div>
+    <div class="card-drop" id="cdrop-${idx}">
+      <div class="card-drop-inner" id="cdrop-inner-${idx}"></div>
     </div>
   </div>`;
 }
@@ -629,29 +639,25 @@ document.getElementById('coach-row-2').innerHTML=coaches.slice(5).map((t,i)=>bui
 function toggleCoach(idx){
   const row=idx<5?1:2;
   const otherRow=row===1?2:1;
-  const panel=document.getElementById('coach-detail-panel-'+row);
-  const inner=document.getElementById('coach-detail-inner-'+row);
+  const drop=document.getElementById('cdrop-'+idx);
+  const inner=document.getElementById('cdrop-inner-'+idx);
   const card=document.getElementById('cc-'+idx);
-  const wrap=document.getElementById('cwrap-'+idx);
-
   if(activeCoach&&activeCoach.idx===idx){
-    closeDrop(panel); card.classList.remove('active'); activeCoach=null; return;
+    closeDrop(drop); card.classList.remove('active'); activeCoach=null; return;
   }
-  // Close any open panel
+  // Instantly close previous
   if(activeCoach){
+    closeDrop(document.getElementById('cdrop-'+activeCoach.idx));
     document.getElementById('cc-'+activeCoach.idx).classList.remove('active');
-    closeDrop(document.getElementById('coach-detail-panel-'+activeCoach.row));
   }
   activeCoach={idx,row};
   card.classList.add('active');
   requestAnimationFrame(() => {
-    // Move panel to be right after the clicked card's wrap
-    wrap.after(panel);
     const cardW = card.offsetWidth;
     const otherRowEl=document.getElementById('coach-row-'+otherRow);
     const otherH = otherRowEl ? otherRowEl.offsetHeight + 8 : 0;
     const avail = getAvailH('coaches-page','coach-row-'+row, row===1 ? otherH : 0);
-    openDrop(panel, inner, buildDropHTML(coaches[idx]), cardW, avail);
+    openDrop(drop, inner, buildDropHTML(coaches[idx]), cardW, avail);
   });
 }
 
